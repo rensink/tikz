@@ -1,0 +1,189 @@
+% Package that defines the styles used in Tikz figures exported in GROOVE.
+
+\ProvidesPackage{groove2tikz}
+\RequirePackage{tikz}
+\usepackage[T1]{fontenc}
+
+% Includes for Tikz
+\usetikzlibrary{arrows,automata,positioning,er}
+
+% Dimension styles
+\newcommand{\tikzfontsize}{\footnotesize}
+\newcommand{\tikzscale}{2}
+\newcommand{\nodeinsep}{2.5pt}
+\newcommand{\labinsep}{2pt}
+
+\tikzstyle every node=[
+    font=\tikzfontsize\sffamily\bfseries,
+    inner sep=\nodeinsep,
+    minimum size=9pt,
+    rectangle split,
+    rectangle split parts=2,
+    rectangle split ignore empty parts,
+]
+
+% Colours
+\newcommand{\red}{red}
+\newcommand{\redfill}{\red!10}
+\newcommand{\green}{green!75!black}
+\newcommand{\greenfill}{\green!10}
+\newcommand{\blue}{blue!75!white}
+\newcommand{\bluefill}{blue!10}
+\newcommand{\grey}{black!8}
+\newcommand{\thin}{black!10}
+\newcommand{\orange}{orange}
+\newcommand{\yellow}{yellow!40}
+% LTS colours
+\tikzstyle{result}=[fill=orange]
+\tikzstyle{final}=[fill=red]
+\tikzstyle{start}=[fill=green]
+\tikzstyle{open}=[fill=black!40]
+
+% Readers
+\tikzstyle{node}=[draw=black,fill=\grey,shape=rectangle]
+\tikzstyle{edge}=[draw,black,-stealth']
+\tikzstyle{lab}=[fill=white,inner sep=\labinsep]
+
+% Erasers
+\tikzstyle{delnode}=[draw=\blue,fill=\bluefill,text=\blue,shape=rectangle,densely dashed]
+\tikzstyle{deledge}=[draw,\blue,densely dashed,-stealth']
+\tikzstyle{dellab}=[text=\blue,fill=white,inner sep=\labinsep]
+
+% Creators
+\tikzstyle{newnode}=[draw=\green,fill=\greenfill,very thick,text=\green,shape=rectangle]
+\tikzstyle{newedge}=[draw,\green,very thick,-stealth']
+\tikzstyle{newlab}=[text=\green,fill=white,inner sep=\labinsep]
+
+% NACs
+\tikzstyle{nacnode}=[draw=\red,fill=\redfill,text=\red,line width=2pt,dotted,shape=rectangle]
+\tikzstyle{nacedge}=[draw,\red,line width=2pt,dotted,-stealth']
+\tikzstyle{naclab}=[text=\red,fill=white,inner sep=\labinsep]
+
+% Remarks
+\tikzstyle{remnode}=[draw=\orange,fill=\yellow,text=\orange,shape=rectangle]
+\tikzstyle{remedge}=[draw,\orange,-stealth']
+\tikzstyle{remlab}=[text=\orange,fill=white,inner sep=\labinsep]
+
+% Quantifiers
+\tikzstyle{quantnode}=[draw=black,dotted,fill=\grey,shape=rectangle]
+\tikzstyle{quantedge}=[draw,black,dotted,-stealth']
+
+% Parameter nodes
+\tikzstyle{parnode}=[draw=black,fill=black,text=white,shape=rectangle,font=\scriptsize\sffamily,inner sep=1pt,minimum size=4pt,anchor=east]
+
+% Special styles (can be combined with the above)
+\tikzstyle{attr}=[shape=ellipse,inner sep=1pt]
+\tikzstyle{prod}=[shape=diamond,inner sep=1pt,shape aspect=2]
+\tikzstyle{whitefill}=[fill=white]
+\tikzstyle{bold}=[very thick]
+\tikzstyle{ultrabold}=[line width=2pt]
+\tikzstyle{thinnode}=[draw=\thin,text=\thin,fill=white,shape=rectangle]
+\tikzstyle{thinedge}=[draw,\thin,text=\thin,-stealth']
+\tikzstyle{thinlab}=[text=\thin,fill=white,inner sep=\labinsep]
+\tikzstyle{type}=[rounded corners=0pt]
+
+% Abstract types
+\tikzstyle{absnode}=[draw=black,fill=\grey,shape=rectangle,densely dashed]
+\tikzstyle{absedge}=[draw,black,-stealth',densely dashed]
+\tikzstyle{abslab}=[font=\tikzfontsize\sffamily\slshape,fill=white,inner sep=\labinsep]
+% Inheritance edge
+\tikzstyle{subedge}=[draw,->,>=open triangle 60]
+
+% Nodified edges
+\tikzstyle{nodified}=[draw=black,fill=white,shape=circle,inner sep=0pt,minimum size=4pt]
+
+% Control automaton
+%  Nodes
+\tikzstyle{cnode}=[draw=black,fill=\grey,shape=rectangle]
+\tikzstyle{cstart}=[draw=black,fill=green,shape=rectangle]
+\tikzstyle{csuccess}=[draw=black,fill=red,shape=rectangle]
+%  Edges
+\tikzstyle{cedge}=[draw,black,-stealth']
+\tikzstyle{clambda}=[draw,green,-stealth']
+\tikzstyle{cfailure}=[draw,red,-stealth']
+%  Labels
+\tikzstyle{clab}=[black,fill=white,inner sep=\labinsep]
+
+% Ugly hack to allow nodes with multiple lines
+\newcommand{\ml}[1]{
+\begin{tabular}{@{}l@{}}#1\vspace{-2pt}\end{tabular}
+}
+
+% User specified macro that is run at the end of an exported figure. By
+% redefining this macro the user can add more stuff to the figure.
+\newcommand{\userdefinedmacro}{\relax}
+
+\usetikzlibrary{decorations.pathreplacing,decorations.markings,shapes.misc}
+\usetikzlibrary{shapes.misc} % for strike out
+
+\newcommand{\newlen}{0.4mm}
+\newcommand{\newcolor}{green!80!black}
+\newcommand{\delcolor}{blue!75!white}
+\newcommand{\notcolor}{red}
+\tikzstyle{newcolor}=[\newcolor]
+\tikzstyle{delcolor}=[\delcolor]
+\tikzstyle{notcolor}=[\notcolor]
+
+\tikzstyle{newnodedecoration}=[
+    newcolor,
+    decoration=
+        { markings,%
+          mark=between positions \newlen and -\newlen step 1mm
+               with { \draw (    .0mm,-\newlen) -- (   .0mm,\newlen);
+                      \draw (-\newlen,    .0mm) -- (\newlen,   .0mm); }
+        }
+]
+\tikzstyle{newedgedecoration}=[
+    decoration=
+        { markings,
+          mark=between positions 0.4mm and -1.4mm step 1.0mm
+               with { \draw[newcolor] (0.0mm,-\newlen) -- (0.0mm,\newlen);
+                      \draw[newcolor] (-\newlen,0.0mm) -- (\newlen,0.0mm); },
+          mark=at position -1.4mm
+               with { \draw[newcolor] (0.0mm,0.0mm) edge (1.4mm,0.0mm); },
+          mark=at position 1
+               with { \arrow[newcolor]{>} }
+        }
+]
+
+
+% Creator nodes
+\tikzstyle{newnode}=[
+    newnodedecoration,
+    decorate,
+    outer sep=\newlen]
+% Creator edges
+\tikzstyle{newedge}=[
+    newedgedecoration,
+    decorate]
+% Eraser nodes
+\tikzstyle{delnode}=[
+    draw=\delcolor,
+    text=\delcolor,
+    densely dashed
+]
+% Eraser edges
+\tikzstyle{deledge}=[
+    ->,
+    delcolor,
+    densely dashed
+]
+% Embargo nodes
+\tikzstyle{notnode}=[
+    name=notname,
+    draw=\notcolor,
+    text=\notcolor,
+    notcolor
+]
+% Embargo edges
+\tikzstyle{notedge}=[
+    ->,
+    notcolor
+]
+
+\newcommand{\n}{\nodepart{two}\sffamily}
+
+\newcommand{\notnode}[3]{
+    \node[notnode] (#1) #2 {#3};
+    \draw[notcolor] (#1.south west) -- (#1.north east);
+}
