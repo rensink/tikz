@@ -1,15 +1,15 @@
 \documentclass{article}
-\usepackage{groove2tikz}
+\usepackage{tikzmacros}
 \begin{document}
 \begin{tikzpicture}
-\node[delnode] (first) {first};
+\node[delbox] (first) {first};
 \node[newnode] (second) at (2,0) {Type \n x=content};
-\notnode{third}{[below=of second]}{Other \n field}
-%\draw (third.south west) -- (third.north east);
+\node[notnode] (third) [below=of second] {Other \n field};
 
-\draw[newedge] (first) -- (second);
-\draw[deledge] (second) -- (third);
-\draw[notedge] (first) -- (third);
+\path[newedge] (first) -- node[newlab]{x} (second);
+\path[deledge] (second) -- node[dellab] {y} (third);
+\notedge (first) -- node[notlab]{x} (third);
+\usenode [left=of third] {Type \n x = content};
 \end{tikzpicture}
 \end{document}
 
