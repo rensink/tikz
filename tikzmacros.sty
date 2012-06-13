@@ -1,0 +1,222 @@
+% Package that defines the styles used in Tikz figures exported in GROOVE.
+
+\ProvidesPackage{groove2tikz}
+\RequirePackage{tikz}
+\usepackage[T1]{fontenc}
+
+% Includes for Tikz
+\usetikzlibrary{arrows,automata,positioning,er}
+
+% Dimension styles
+\newcommand{\tikzfontsize}{\footnotesize}
+\newcommand{\tikzscale}{2}
+\newcommand{\nodeinsep}{2.5pt}
+\newcommand{\labinsep}{.8pt}
+
+\tikzstyle every node=[
+    font=\tikzfontsize\sffamily\bfseries,
+    inner sep=\nodeinsep,
+    rectangle,
+    rounded corners=2,
+]
+\tikzstyle multipart=[
+    rectangle split,
+    rectangle split parts=2,
+    rectangle split ignore empty parts,
+]
+
+% Colours
+\newcommand{\red}{red}
+\newcommand{\redfill}{\red!10}
+\newcommand{\green}{green!75!black}
+\newcommand{\greenfill}{\green!10}
+\newcommand{\blue}{blue!75!white}
+\newcommand{\bluefill}{blue!10}
+\newcommand{\grey}{black!8}
+\newcommand{\thin}{black!10}
+\newcommand{\orange}{orange}
+\newcommand{\yellow}{yellow!40}
+
+% Ugly hack to allow nodes with multiple lines
+\newcommand{\ml}[1]{
+\begin{tabular}{@{}l@{}}#1\vspace{-2pt}\end{tabular}
+}
+
+% User specified macro that is run at the end of an exported figure. By
+% redefining this macro the user can add more stuff to the figure.
+\newcommand{\userdefinedmacro}{\relax}
+
+\usetikzlibrary{decorations.pathreplacing,decorations.markings,decorations.text}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{shapes.misc} 
+
+\newcommand{\usecolor}{black}
+\newcommand{\newcolor}{green!80!black}
+\newcommand{\delcolor}{blue!75!white}
+\newcommand{\notcolor}{red}
+
+
+\tikzstyle every box=[
+    font=\tikzfontsize\sffamily\bfseries,
+    inner sep=\nodeinsep,
+    shape=rectangle,
+    minimum size=9pt,
+]
+
+\tikzstyle every lab=[
+    font=\tikzfontsize\sffamily\mdseries,
+    inner sep=\labinsep,
+    fill=white,
+]
+
+%%%%%%%%%%%%%%%% Readers %%%%%%%%%%%%%%%%%%
+\tikzstyle{usecolor}=[\usecolor]
+% Creator nodes
+\tikzstyle usebox=[
+    every box,
+    draw=\usecolor,
+    text=\usecolor,
+]
+\tikzstyle usenode=[
+    usebox,
+    multipart,
+]
+% Creator edges
+\tikzstyle{useedge}=[
+    ->,
+    draw=\usecolor,
+    text=\usecolor,
+    usecolor,
+]
+% Creator labels
+\tikzstyle uselab=[
+    every lab,
+    text=\usecolor,
+]
+
+%%%%%%%%%%%%%%%% Creators %%%%%%%%%%%%%%%%%%
+\tikzstyle{newcolor}=[\newcolor]
+% Creator outline
+\tikzstyle newoutline=[
+    preaction={-,
+               draw=\newcolor,
+               dash pattern=on 0mm off .3mm on .1mm off .6mm,
+               line width=.7mm,
+               shorten >=1mm,
+              },
+    draw=\newcolor,
+    dash pattern=on .7mm off .3mm,
+    shorten >=.3mm,
+]
+% Creator nodes
+\tikzstyle newbox=[
+    every box,
+    newoutline,
+    text=\newcolor,
+]
+\tikzstyle newnode=[
+    newbox,
+    multipart,
+]
+% Creator edges
+\tikzstyle{newedge}=[
+    ->,
+    newoutline,
+]
+% Creator labels
+\tikzstyle newlab=[
+    every lab,
+    text=\newcolor,
+]
+
+%%%%%%%%%%%%%%%% Erasers %%%%%%%%%%%%%%%%%%
+\tikzstyle{delcolor}=[\delcolor]
+% Eraser nodes
+\tikzstyle{delbox}=[
+    every box,
+    draw=\delcolor,
+    text=\delcolor,
+    densely dashed,
+]
+\tikzstyle{delnode}=[
+    delbox,
+    multipart,
+]
+% Eraser edges
+\tikzstyle{deledge}=[
+    ->,
+    draw=\delcolor,
+    densely dashed,
+]
+% Eraser labels
+\tikzstyle dellab=[
+    every lab,
+    text=\delcolor,
+]
+
+%%%%%%%%%%%%%%%% Embargoes %%%%%%%%%%%%%%%%%%
+\tikzstyle{notcolor}=[\notcolor]
+\tikzstyle{notedgedecoration}=[
+    decoration=
+        { markings,
+          mark=at position .2
+               with { \draw[-,notcolor] (-1mm,-1.2mm) -- (1mm, 1.2mm);
+                      \draw[-,notcolor] (-1mm, 1.2mm) -- (1mm,-1.2mm); },
+        }
+]
+% Embargo nodes
+\tikzstyle{notbox}=[
+    every box,
+    draw=\notcolor,
+    text=\notcolor,
+    after node path={(\tikzlastnode.south west) edge[notcolor]
+                     (\tikzlastnode.north east)},
+]
+\tikzstyle notnode=[
+    notbox,
+    multipart,
+]
+% Embargo edges
+\tikzstyle{notedge}=[
+    ->,
+    draw=\notcolor,
+    text=\notcolor,
+    preaction={notedgedecoration,decorate},
+]
+% Embargo labels
+\tikzstyle notlab=[
+    every lab,
+    text=\notcolor,
+]
+
+\newcommand{\n}{\nodepart{two}\sffamily\mdseries}
+
+% Convenience macros
+\newcommand{\usenode}{
+    \node[usenode]
+}
+\newcommand{\useedge}{
+    \path[useedge]
+}
+
+% Convenience macros
+\newcommand{\newnode}{
+    \node[newnode]
+}
+\newcommand{\newedge}{
+    \path[newedge]
+}
+
+\newcommand{\delnode}{
+    \node[delnode]
+}
+\newcommand{\deledge}{
+    \path[deledge]
+}
+
+\newcommand{\notnode}{
+    \node[notnode]
+}
+\newcommand{\notedge}{
+    \path[notedge]
+}
